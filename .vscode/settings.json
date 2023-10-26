@@ -22,7 +22,19 @@
     "files.associations": {
         "http_client.h": "c",
         "httpclient.h": "c",
-        "wificonnection.h": "c"
+        "wificonnection.h": "c",
+        "stdio.h": "c",
+        "charconv": "c",
+        "chrono": "c",
+        "optional": "c",
+        "format": "c",
+        "ratio": "c",
+        "system_error": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true,
 }

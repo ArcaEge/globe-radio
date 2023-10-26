@@ -6,22 +6,14 @@
 
 #define HTTPC_DEBUG
 
-#ifdef HTTPC_DEBUG
-#define printf_DEBUG printf
-#endif
-
 struct HttpRequest {
-    char *header;
-    char *body;
+    char* header;
+    char* body;
     bool complete;
     httpc_result_t result;
     u32_t serverResponse;
     err_t err;
 };
-
-int main();
-
-// struct HttpRequest* createHttpRequest(const char *serverName, const char* uri);
 
 err_t httpClientHeadersDone(httpc_state_t* connection, struct HttpRequest* request, struct pbuf* hdr, u16_t hdr_len, u32_t content_len);
 err_t httpClientReceive(struct HttpRequest* request, struct tcp_pcb* tpcb, struct pbuf* p, err_t err);

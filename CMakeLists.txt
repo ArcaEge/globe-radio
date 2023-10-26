@@ -7,29 +7,44 @@ set (CMAKE_C_STANDARD 11)
 set (CMAKE_CXX_STANDARD 17)
 set(PICO_BOARD pico_w)
 
-project(httpclient C CXX ASM)
+project(radio C CXX ASM)
 pico_sdk_init()
 
-add_executable(httpclient
-        httpclient.c
+add_executable(radio
+        radio.c
+        audio.h
         wificonnection.c
+        httpclient.c
         )
-target_compile_definitions(httpclient PRIVATE
+
+add_subdirectory(picomp3lib/src)
+
+target_include_directories(radio PUBLIC
+        ${CMAKE_SOURCE_DIR}/
+        )
+
+target_compile_definitions(radio PRIVATE
         WIFI_SSID="$ENV{WIFI_SSID}"
         WIFI_PASSWORD="$ENV{WIFI_PASSWORD}"
         )
-target_include_directories(httpclient PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
+
+target_include_directories(radio PRIVATE
         /home/arca/pico/pico-sdk/**
         )
-target_link_libraries(httpclient
+target_link_libraries(radio
+        picomp3lib
         pico_cyw43_arch_lwip_threadsafe_background
         pico_lwip_http
+        hardware_timer
+        hardware_clocks
+        hardware_dma
+        hardware_pio
+        hardware_pwm
         pico_stdlib
         )
 
-pico_add_extra_outputs(httpclient)
+pico_add_extra_outputs(radio)
 
-pico_enable_stdio_usb(httpclient 1)
-pico_enable_stdio_uart(httpclient 1)
-pico_add_extra_outputs(httpclient)
+pico_enable_stdio_usb(radio 1)
+pico_enable_stdio_uart(radio 1)
+pico_add_extra_outputs(radio)

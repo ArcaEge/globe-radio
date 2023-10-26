@@ -1,62 +1,43 @@
 #include "httpclient.h"
 
-int main() {
-#include "wificonnection.h"
+// int main() {
+// #include "wificonnection.h"
 
-    stdio_init_all();
+//     stdio_init_all();
 
-    connectToWifi(WIFI_SSID, WIFI_PASSWORD);
+//     connectToWifi(WIFI_SSID, WIFI_PASSWORD);
 
-    // struct HttpRequest* response = createHttpRequest("de1.api.radio-browser.info", "/json/stations/topclick/5");
-    char *serverName = "de1.api.radio-browser.info";
-    char *uri = "/json/stations/topclick/2";
+//     char* serverName = "de1.api.radio-browser.info";
+//     char* uri = "/json/stations/topclick/2";
 
-    struct HttpRequest request;
-    
-    request.complete = false;
+//     struct HttpRequest request;
 
-    httpc_connection_t settings = {
-        .use_proxy = 0,
-        .headers_done_fn = httpClientHeadersDone,
-        .result_fn = httpClientResult
-    };
-    httpc_state_t* connection = NULL;
+//     request.complete = false;
 
-    request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
+//     httpc_connection_t settings = {
+//         .use_proxy = 0,
+//         .headers_done_fn = httpClientHeadersDone,
+//         .result_fn = httpClientResult
+//     };
+//     httpc_state_t* connection = NULL;
 
-    printf("Waiting for request to complete\n");
-    while (!(request.complete)) {
-        sleep_ms(10);
-    }
-    printf("Request complete\n");
+//     request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
 
-    cyw43_arch_deinit();
-    return 0;
-}
+//     printf("Waiting for request to complete\n");
+//     while (!(request.complete)) {
+//         sleep_ms(10);
+//     }
+//     printf("Request complete\n");
 
-// struct HttpRequest* createHttpRequest(const char* serverName, const char* uri) {
-//     // struct HttpRequest request;
-    
-//     // request.complete = false;
-//     // bool a = true;
-
-//     // httpc_connection_t settings = {
-//     //     .use_proxy = 0,
-//     //     .headers_done_fn = headers_done_fn,
-//     //     .result_fn = result_fn
-//     // };
-//     // httpc_state_t* connection;
-
-//     // request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, recv_fn, &request, &connection);
-
-//     // return &request;
+//     cyw43_arch_deinit();
+//     return 0;
 // }
 
 err_t httpClientHeadersDone(httpc_state_t* connection, struct HttpRequest* request, struct pbuf* hdr, u16_t hdr_len, u32_t content_len) {
-    // struct HttpRequest *request = (struct HttpRequest*)arg;
-
-    printf_DEBUG("in headers_done_fn\n");
-    printf_DEBUG("content length: %d\n", content_len);
+#ifdef HTTPC_DEBUG
+    printf("in headers_done_fn\n");
+    printf("content length: %d\n", content_len);
+#endif
 
     request->header = (char*)calloc(hdr_len, sizeof(char));
     request->body = (char*)calloc(content_len, sizeof(char));
@@ -66,8 +47,6 @@ err_t httpClientHeadersDone(httpc_state_t* connection, struct HttpRequest* reque
 }
 
 err_t httpClientReceive(struct HttpRequest* request, struct tcp_pcb* tpcb, struct pbuf* p, err_t err) {
-    // struct HttpRequest *request = (struct HttpRequest*)arg;
-
     printf(">>> recv_fn >>>\n");
     if (p == NULL) {
         printf("p is NULL\n");
@@ -87,8 +66,6 @@ err_t httpClientReceive(struct HttpRequest* request, struct tcp_pcb* tpcb, struc
 
 // Print result
 void httpClientResult(struct HttpRequest* request, httpc_result_t httpc_result, u32_t rx_content_len, u32_t srv_res, err_t err) {
-    // struct HttpRequest *request = (struct HttpRequest*)arg;
-
     printf(">>> result_fn >>>\n");
     printf("httpc_result: %s\n",
         httpc_result == HTTPC_RESULT_OK ? "HTTPC_RESULT_OK"
@@ -111,7 +88,7 @@ void httpClientResult(struct HttpRequest* request, httpc_result_t httpc_result, 
     printf(request->body);
     printf("\n");
     printf("<<< result_fn <<<\n");
-    
+
     (*request).complete = true;
     (*request).err = err;
     (*request).result = httpc_result;
