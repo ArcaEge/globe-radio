@@ -12,7 +12,8 @@ pico_sdk_init()
 
 add_executable(radio
         radio.c
-        audio.h
+        audio.c
+        audiofile.h
         wificonnection.c
         httpclient.c
         )
