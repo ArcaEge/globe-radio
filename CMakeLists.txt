@@ -1,51 +1,65 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12)
 
-message(STATUS "WIFI_SSID $ENV{WIFI_SSID}")
-
-include(pico_sdk_import.cmake)
-set (CMAKE_C_STANDARD 11)
-set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(PICO_BOARD pico_w)
 
+#set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+
+# Import those libraries
+include(pico_sdk_import.cmake)
+
+# Define project
 project(radio C CXX ASM)
+#enable_language( C CXX ASM )
+
+# Initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-add_executable(radio
-        radio.c
-        audio.c
-        audiofile.h
-        wificonnection.c
-        httpclient.c
-        )
+# Set any variables required for importing libraries
+SET(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/FreeRTOS-Kernel)
 
-add_subdirectory(picomp3lib/src)
+include(${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 
-target_include_directories(radio PUBLIC
-        ${CMAKE_SOURCE_DIR}/
-        )
+add_library(freertos_config INTERFACE)
+target_include_directories(freertos_config
+    INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Config
+)
 
-target_compile_definitions(radio PRIVATE
-        WIFI_SSID="$ENV{WIFI_SSID}"
-        WIFI_PASSWORD="$ENV{WIFI_PASSWORD}"
-        )
+# add_compile_options(
+#     -mcpu=cortex-m0plus
+#     # -mthumb
+#     # -mfpu=fpv5-sp-d16
+#     # -mfloat-abi=hard
 
-target_include_directories(radio PRIVATE
-        /home/arca/pico/pico-sdk/**
-        )
-target_link_libraries(radio
-        picomp3lib
-        pico_cyw43_arch_lwip_threadsafe_background
-        pico_lwip_http
-        hardware_timer
-        hardware_clocks
-        hardware_dma
-        hardware_pio
-        hardware_pwm
-        pico_stdlib
-        )
+#     # -fdata-sections
+#     # -ffunction-sections
+#     # -fno-strict-aliasing
 
-pico_add_extra_outputs(radio)
+#     # -Wall
 
-pico_enable_stdio_usb(radio 1)
-pico_enable_stdio_uart(radio 1)
-pico_add_extra_outputs(radio)
+#     # $<$<CONFIG:Debug>:-Og>
+# )
+
+# add_library(FreeRTOS STATIC
+#     lib/FreeRTOS-Kernel/event_groups.c
+#     lib/FreeRTOS-Kernel/list.c
+#     lib/FreeRTOS-Kernel/queue.c
+#     lib/FreeRTOS-Kernel/stream_buffer.c
+#     lib/FreeRTOS-Kernel/tasks.c
+#     lib/FreeRTOS-Kernel/timers.c
+#     lib/FreeRTOS-Kernel/portable/MemMang/heap_3.c
+#     lib/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
+# )
+
+# target_include_directories(FreeRTOS PUBLIC
+#     Config/
+#     lib/FreeRTOS-Kernel/include
+#     lib/FreeRTOS-Kernel/portable/GCC/ARM_CM0
+# )
+
+
+# Add subdirectories
+add_subdirectory(src)
+add_subdirectory(lib)

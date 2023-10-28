@@ -7,15 +7,34 @@
 
 // allow override in some examples
 #ifndef NO_SYS
-#define NO_SYS                      1
+#define NO_SYS                      0
 #endif
+
 // allow override in some examples
 #ifndef LWIP_SOCKET
-#define LWIP_SOCKET                 0
+#define LWIP_SOCKET                 1
 #endif
+
 #if PICO_CYW43_ARCH_POLL
 #define MEM_LIBC_MALLOC             1
+
 #else
+#define LWIP_COMPAT_SOCKETS             1
+#define LWIP_POSIX_SOCKETS_IO_NAMES     0       /* Causes conflicts with normal file operations */
+#define LWIP_TCP_CLOSE_TIMEOUT_MS_DEFAULT   2000        /* Speed up socket close (alternative to enabling SO_LINGER) - default is 20 secs */
+#define LWIP_TIMEVAL_PRIVATE            0       /* Use the system-wide timeval definitions */
+
+#define TCPIP_THREAD_STACKSIZE 1024
+#define DEFAULT_THREAD_STACKSIZE 1024
+#define DEFAULT_RAW_RECVMBOX_SIZE 8
+#define TCPIP_MBOX_SIZE 8
+
+// not necessary, can be done either way
+#define LWIP_TCPIP_CORE_LOCKING_INPUT 1
+
+// ping_thread sets socket receive timeout, so enable this feature
+#define LWIP_SO_RCVTIMEO 1
+
 // MEM_LIBC_MALLOC is incompatible with non polling versions
 #define MEM_LIBC_MALLOC             0
 #endif

@@ -38,4 +38,5 @@
         "math.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true,
+    "C_Cpp.errorSquiggles": "enabled",
 }

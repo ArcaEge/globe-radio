@@ -1,3 +1,6 @@
 [submodule "picomp3lib"]
-	path = picomp3lib
+	path = lib/picomp3lib
 	url = https://github.com/ikjordan/picomp3lib
+[submodule "lib/FreeRTOS-Kernel"]
+	path = lib/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
