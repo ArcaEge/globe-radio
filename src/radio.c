@@ -2,65 +2,54 @@
 #include <task.h>
 #include "pico/cyw43_arch.h"
 //#include <queue.h>
-// #include <semphr.h>
+#include <semphr.h>
 #include <stdio.h>
 #include "pico/stdlib.h"
 //#include "httpclient.h"
-//#include "wificonnection.h"
+#include "wificonnection.h"
 //#include "picomp3lib/src/mp3dec.h"
-// #include <math.h>
 // #include "lwip/dns.h"
 
-// #include "audiofile.h"
-// #include "audio.h"
+#include "audiofile.h"
+#include "audio.h"
 
-// #define SPEAKER 6
+#define SPEAKER 6
 
-// const uint sampleRate = 11000;
+const uint sampleRate = 11000;
 // ip_addr_t ip;
 
 // static QueueHandle_t xQueue = NULL;
-// static SemaphoreHandle_t printfMutex;
+static SemaphoreHandle_t printfMutex;
 
-// uint64_t writeTone(struct audioPlayer* player) {
-//     //pwm_set_gpio_level(player->gpio, WAV_DATA[player->playbackPosition] * (player->amplitude/255.0f) * 4);
-//     int data = WAV_DATA[player->playbackPosition];
-//     if (++player->playbackPosition >= WAV_DATA_LENGTH) player->playbackPosition = 0;
-//     return data;
-// }
+uint64_t writeTone(struct audioPlayer* player) {
+    //pwm_set_gpio_level(player->gpio, WAV_DATA[player->playbackPosition] * (player->amplitude/255.0f) * 4);
+    int data = WAV_DATA[player->playbackPosition];
+    if (++player->playbackPosition >= WAV_DATA_LENGTH) player->playbackPosition = 0;
+    return data;
+}
 
-// void audioTask(void *pvParameters) {
-//     // Make speaker pin PWM
-//     gpio_set_function(SPEAKER, GPIO_FUNC_PWM);
+void audioTask(void *pvParameters) {
+    // Make speaker pin PWM
+    gpio_set_function(SPEAKER, GPIO_FUNC_PWM);
 
-//     struct audioPlayer player;
-//     initAudioPlayer(&player, SPEAKER, sampleRate, 8, writeTone);
+    struct audioPlayer player;
+    initAudioPlayer(&player, SPEAKER, sampleRate, 8, writeTone);
 
-//     playAudio(&player);
+    playAudio(&player);
 
-//     xSemaphoreTake(printfMutex, portMAX_DELAY);
-//     printf("Timer value %d\n", player.sampleTime);
-//     printf("sampleRate: %dHz\n", sampleRate);
-//     xSemaphoreGive(printfMutex);
+    xSemaphoreTake(printfMutex, portMAX_DELAY);
+    printf("Timer value %d\n", player.sampleTime);
+    printf("sampleRate: %dHz\n", sampleRate);
+    xSemaphoreGive(printfMutex);
 
-//     while(true) {
-//         vTaskDelay(500);
-//     }
-// }
+    while(true) {
+        vTaskDelay(500);
+    }
+}
 
 void wifiConnectTask(void *pvParameters) {
-    if (cyw43_arch_init()) {
-        printf("failed to initialise\n");
-        return;
-    }
-    cyw43_arch_enable_sta_mode();
-    printf("Connecting to Wi-Fi...\n");
-    if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
-        printf("failed to connect.\n");
-        exit(1);
-    } else {
-        printf("Connected.\n");
-    }
+    connectToWifi(WIFI_SSID, WIFI_PASSWORD);
+
     while (true) {
         vTaskDelay(500);
     }
@@ -69,11 +58,11 @@ void wifiConnectTask(void *pvParameters) {
 int main() {
     stdio_init_all();
 
-    // printfMutex = xSemaphoreCreateMutex();
+    printfMutex = xSemaphoreCreateMutex();
 
     TaskHandle_t wifiHandle;
 
-    //xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
+    xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
     xTaskCreate(wifiConnectTask, "wifiConnect", configMINIMAL_STACK_SIZE, NULL, 1, &wifiHandle);
 
     // Note: tried with and without this line, no difference

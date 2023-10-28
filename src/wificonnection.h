@@ -4,4 +4,4 @@
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 
-extern void connectToWifi(void *pvParameters);
+extern bool connectToWifi(char* ssid, char* password);
