@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 add_executable(radio
         radio.c
         audio.c
+        utils.c
         audiofile.h
         wificonnection.c
         httpclient.c

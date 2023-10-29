@@ -1,11 +1,11 @@
-#include "FreeRTOS.h"
+#include <FreeRTOS.h>
 #include <task.h>
 #include "pico/cyw43_arch.h"
 //#include <queue.h>
 #include <semphr.h>
 #include <stdio.h>
 #include "pico/stdlib.h"
-//#include "httpclient.h"
+#include "httpclient.h"
 #include "wificonnection.h"
 //#include "picomp3lib/src/mp3dec.h"
 // #include "lwip/dns.h"
@@ -47,8 +47,42 @@ void audioTask(void *pvParameters) {
     }
 }
 
+void webRequestTask(void *pvParameters) {
+    char *serverName = "de1.api.radio-browser.info";
+    char *uri = "/json/stations/topclick/2";
+
+    struct HttpRequest request;
+
+    request.complete = false;
+
+    httpc_state_t* connection = NULL;
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+    httpc_connection_t settings = {
+        .use_proxy = 0,
+        .headers_done_fn = httpClientHeadersDone,
+        .result_fn = httpClientResult
+    };
+
+    request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
+    #pragma GCC diagnostic pop
+
+    printf("Waiting for request to complete\n");
+    while (!(request.complete)) {
+        sleep_ms(10);
+    }
+    printf("Request complete\n");
+
+    while (true) {
+        vTaskDelay(500);
+    }
+}
+
 void wifiConnectTask(void *pvParameters) {
-    connectToWifi(WIFI_SSID, WIFI_PASSWORD);
+    connectToWifi(WIFI_SSID, WIFI_PASSWORD, &printfMutex);
+
+    xTaskCreate(webRequestTask, "webRequest", 4096, NULL, 1, NULL);
 
     while (true) {
         vTaskDelay(500);
@@ -75,38 +109,4 @@ int main() {
 
     cyw43_arch_deinit();
     return 0;
-    //connectToWifi(WIFI_SSID, WIFI_PASSWORD);
-
-    // char *serverName = "de1.api.radio-browser.info";
-    // char *uri = "/json/stations/topclick/2";
-
-    // struct HttpRequest request;
-
-    // request.complete = false;
-
-    // httpc_state_t* connection = NULL;
-
-    // #pragma GCC diagnostic push
-    // #pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
-    // httpc_connection_t settings = {
-    //     .use_proxy = 0,
-    //     .headers_done_fn = httpClientHeadersDone,
-    //     .result_fn = httpClientResult
-    // };
-
-    // request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
-    // #pragma GCC diagnostic pop
-
-    // printf("Waiting for request to complete\n");
-    // while (!(request.complete)) {
-    //     sleep_ms(10);
-    // }
-    // printf("Request complete\n");
-
-    // // cancel_repeating_timer(&timer);
-    // // pwm_set_enabled(speaker_slice_num, false);
-    // stopAudio(&player);
-    // sleep_ms(1000);
-    // playAudio(&player);
-
 }
