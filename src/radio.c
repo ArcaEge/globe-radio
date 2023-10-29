@@ -96,7 +96,7 @@ int main() {
     printfMutex = xSemaphoreCreateMutex();
 
     TaskHandle_t wifiHandle;
-    xTaskCreate(wifiConnectTask, "wifiConnect", configMINIMAL_STACK_SIZE, NULL, 1, &wifiHandle);
+    xTaskCreate(wifiConnectTask, "wifiConnect", 512, NULL, 1, &wifiHandle);
     vTaskCoreAffinitySet(wifiHandle, (1 << 0));     // Core 0
     
     vTaskStartScheduler();

@@ -543,7 +543,7 @@ Disassembly of section .text:
 100004ec:	2301      	movs	r3, #1
 100004ee:	9300      	str	r3, [sp, #0]
 100004f0:	2300      	movs	r3, #0
-100004f2:	0052      	lsls	r2, r2, #1
+100004f2:	0092      	lsls	r2, r2, #2
 100004f4:	f019 f85a 	bl	100195ac <xTaskCreate>
 100004f8:	9803      	ldr	r0, [sp, #12]
 100004fa:	2101      	movs	r1, #1

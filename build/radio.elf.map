@@ -3873,9 +3873,9 @@ Discarded input sections
                 0x00000000       0x1f src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/timers.c.obj
  .rodata.__func__.10
                 0x00000000       0x1c src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/timers.c.obj
- .text          0x00000000        0x0 /tmp/ccoUIVEw.o
- .data          0x00000000        0x0 /tmp/ccoUIVEw.o
- .bss           0x00000000        0x0 /tmp/ccoUIVEw.o
+ .text          0x00000000        0x0 /tmp/ccHbKi4e.o
+ .data          0x00000000        0x0 /tmp/ccHbKi4e.o
+ .bss           0x00000000        0x0 /tmp/ccHbKi4e.o
  .data          0x00000000        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/thumb/v6-m/nofp/libgcc.a(_dvmd_tls.o)
  .bss           0x00000000        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/thumb/v6-m/nofp/libgcc.a(_dvmd_tls.o)
  .text          0x00000000        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libg.a(lib_a-atexit.o)
@@ -4147,7 +4147,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v6-m/
 .boot2          0x10000000      0x100
                 0x10000000                        __boot2_start__ = .
  *(.boot2)
- .boot2         0x10000000      0x100 /tmp/ccoUIVEw.o
+ .boot2         0x10000000      0x100 /tmp/ccHbKi4e.o
                 0x10000100                        __boot2_end__ = .
                 0x00000001                        ASSERT (((__boot2_end__ - __boot2_start__) == 0x100), ERROR: Pico second stage bootloader must be 256 bytes in size)
 
@@ -9026,7 +9026,7 @@ LOAD src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/queue.c.obj
 LOAD src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/stream_buffer.c.obj
 LOAD src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/tasks.c.obj
 LOAD src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/timers.c.obj
-LOAD /tmp/ccoUIVEw.o
+LOAD /tmp/ccHbKi4e.o
 LOAD /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libstdc++.a
 LOAD /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libm.a
 START GROUP
@@ -9249,7 +9249,7 @@ LOAD linker stubs
  .ARM.attributes
                 0x000010c8       0x2c src/CMakeFiles/radio.dir/__/lib/FreeRTOS-Kernel/timers.c.obj
  .ARM.attributes
-                0x000010f4       0x22 /tmp/ccoUIVEw.o
+                0x000010f4       0x22 /tmp/ccHbKi4e.o
  .ARM.attributes
                 0x00001116       0x1e /usr/lib/gcc/arm-none-eabi/13.2.0/thumb/v6-m/nofp/libgcc.a(_dvmd_tls.o)
  .ARM.attributes
