@@ -83,6 +83,7 @@ void wifiConnectTask(void *pvParameters) {
     connectToWifi(WIFI_SSID, WIFI_PASSWORD, &printfMutex);
 
     xTaskCreate(webRequestTask, "webRequest", 4096, NULL, 1, NULL);
+    xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
 
     while (true) {
         vTaskDelay(500);
@@ -95,12 +96,8 @@ int main() {
     printfMutex = xSemaphoreCreateMutex();
 
     TaskHandle_t wifiHandle;
-
-    xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
     xTaskCreate(wifiConnectTask, "wifiConnect", configMINIMAL_STACK_SIZE, NULL, 1, &wifiHandle);
-
-    // Note: tried with and without this line, no difference
-    vTaskCoreAffinitySet(wifiHandle, 1);
+    vTaskCoreAffinitySet(wifiHandle, (1 << 0));     // Core 0
     
     vTaskStartScheduler();
 

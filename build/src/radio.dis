@@ -33,11 +33,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  14 .comment      00000046  00000000  00000000  00066a28  2**0
                   CONTENTS, READONLY
- 15 .debug_info   0007d452  00000000  00000000  00066a6e  2**0
+ 15 .debug_info   0007d455  00000000  00000000  00066a6e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_abbrev 00014ac5  00000000  00000000  000e3ec0  2**0
+ 16 .debug_abbrev 00014ac5  00000000  00000000  000e3ec3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_loclists 00036eae  00000000  00000000  000f8985  2**0
+ 17 .debug_loclists 00036eae  00000000  00000000  000f8988  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_aranges 00003ba0  00000000  00000000  0012f838  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -278,7 +278,7 @@ Disassembly of section .text:
 10000270:	2000aa08 	.word	0x2000aa08
 10000274:	20037884 	.word	0x20037884
 10000278:	10002b01 	.word	0x10002b01
-1000027c:	100004b9 	.word	0x100004b9
+1000027c:	100004d1 	.word	0x100004d1
 10000280:	10002ac1 	.word	0x10002ac1
 10000284:	00005657 	.word	0x00005657
 
@@ -491,70 +491,70 @@ Disassembly of section .text:
 10000470:	1001b3bc 	.word	0x1001b3bc
 
 10000474 <wifiConnectTask>:
-10000474:	b500      	push	{lr}
+10000474:	b530      	push	{r4, r5, lr}
 10000476:	b083      	sub	sp, #12
-10000478:	4a0a      	ldr	r2, [pc, #40]	@ (100004a4 <wifiConnectTask+0x30>)
-1000047a:	490b      	ldr	r1, [pc, #44]	@ (100004a8 <wifiConnectTask+0x34>)
-1000047c:	480b      	ldr	r0, [pc, #44]	@ (100004ac <wifiConnectTask+0x38>)
+10000478:	4a0e      	ldr	r2, [pc, #56]	@ (100004b4 <wifiConnectTask+0x40>)
+1000047a:	490f      	ldr	r1, [pc, #60]	@ (100004b8 <wifiConnectTask+0x44>)
+1000047c:	480f      	ldr	r0, [pc, #60]	@ (100004bc <wifiConnectTask+0x48>)
 1000047e:	f000 f95b 	bl	10000738 <connectToWifi>
 10000482:	2280      	movs	r2, #128	@ 0x80
-10000484:	490a      	ldr	r1, [pc, #40]	@ (100004b0 <wifiConnectTask+0x3c>)
-10000486:	480b      	ldr	r0, [pc, #44]	@ (100004b4 <wifiConnectTask+0x40>)
-10000488:	2300      	movs	r3, #0
-1000048a:	9301      	str	r3, [sp, #4]
-1000048c:	3301      	adds	r3, #1
-1000048e:	9300      	str	r3, [sp, #0]
+10000484:	490e      	ldr	r1, [pc, #56]	@ (100004c0 <wifiConnectTask+0x4c>)
+10000486:	480f      	ldr	r0, [pc, #60]	@ (100004c4 <wifiConnectTask+0x50>)
+10000488:	2500      	movs	r5, #0
+1000048a:	9501      	str	r5, [sp, #4]
+1000048c:	2401      	movs	r4, #1
+1000048e:	9400      	str	r4, [sp, #0]
 10000490:	2300      	movs	r3, #0
 10000492:	0152      	lsls	r2, r2, #5
 10000494:	f019 f88a 	bl	100195ac <xTaskCreate>
-10000498:	20fa      	movs	r0, #250	@ 0xfa
-1000049a:	0040      	lsls	r0, r0, #1
-1000049c:	f019 fa9e 	bl	100199dc <vTaskDelay>
-100004a0:	e7fa      	b.n	10000498 <wifiConnectTask+0x24>
-100004a2:	46c0      	nop			@ (mov r8, r8)
-100004a4:	20016218 	.word	0x20016218
-100004a8:	1001b3d0 	.word	0x1001b3d0
-100004ac:	1001b3dc 	.word	0x1001b3dc
-100004b0:	1001b3e8 	.word	0x1001b3e8
-100004b4:	100003fd 	.word	0x100003fd
+10000498:	2280      	movs	r2, #128	@ 0x80
+1000049a:	490b      	ldr	r1, [pc, #44]	@ (100004c8 <wifiConnectTask+0x54>)
+1000049c:	480b      	ldr	r0, [pc, #44]	@ (100004cc <wifiConnectTask+0x58>)
+1000049e:	9501      	str	r5, [sp, #4]
+100004a0:	9400      	str	r4, [sp, #0]
+100004a2:	2300      	movs	r3, #0
+100004a4:	00d2      	lsls	r2, r2, #3
+100004a6:	f019 f881 	bl	100195ac <xTaskCreate>
+100004aa:	20fa      	movs	r0, #250	@ 0xfa
+100004ac:	0040      	lsls	r0, r0, #1
+100004ae:	f019 fa95 	bl	100199dc <vTaskDelay>
+100004b2:	e7fa      	b.n	100004aa <wifiConnectTask+0x36>
+100004b4:	20016218 	.word	0x20016218
+100004b8:	1001b3d0 	.word	0x1001b3d0
+100004bc:	1001b3dc 	.word	0x1001b3dc
+100004c0:	1001b3e8 	.word	0x1001b3e8
+100004c4:	100003fd 	.word	0x100003fd
+100004c8:	1001b3f4 	.word	0x1001b3f4
+100004cc:	10000391 	.word	0x10000391
 
-100004b8 <main>:
-100004b8:	b510      	push	{r4, lr}
-100004ba:	b084      	sub	sp, #16
-100004bc:	f004 fede 	bl	1000527c <stdio_init_all>
-100004c0:	2001      	movs	r0, #1
-100004c2:	f017 fbb7 	bl	10017c34 <xQueueCreateMutex>
-100004c6:	4b10      	ldr	r3, [pc, #64]	@ (10000508 <main+0x50>)
-100004c8:	6018      	str	r0, [r3, #0]
-100004ca:	2280      	movs	r2, #128	@ 0x80
-100004cc:	490f      	ldr	r1, [pc, #60]	@ (1000050c <main+0x54>)
-100004ce:	4810      	ldr	r0, [pc, #64]	@ (10000510 <main+0x58>)
-100004d0:	2300      	movs	r3, #0
-100004d2:	9301      	str	r3, [sp, #4]
-100004d4:	2401      	movs	r4, #1
-100004d6:	9400      	str	r4, [sp, #0]
-100004d8:	00d2      	lsls	r2, r2, #3
-100004da:	f019 f867 	bl	100195ac <xTaskCreate>
-100004de:	2280      	movs	r2, #128	@ 0x80
-100004e0:	490c      	ldr	r1, [pc, #48]	@ (10000514 <main+0x5c>)
-100004e2:	480d      	ldr	r0, [pc, #52]	@ (10000518 <main+0x60>)
-100004e4:	ab03      	add	r3, sp, #12
-100004e6:	9301      	str	r3, [sp, #4]
-100004e8:	9400      	str	r4, [sp, #0]
-100004ea:	2300      	movs	r3, #0
-100004ec:	0052      	lsls	r2, r2, #1
-100004ee:	f019 f85d 	bl	100195ac <xTaskCreate>
-100004f2:	9803      	ldr	r0, [sp, #12]
-100004f4:	2101      	movs	r1, #1
-100004f6:	f019 f977 	bl	100197e8 <vTaskCoreAffinitySet>
-100004fa:	f019 f8a9 	bl	10019650 <vTaskStartScheduler>
-100004fe:	20fa      	movs	r0, #250	@ 0xfa
-10000500:	0040      	lsls	r0, r0, #1
-10000502:	f019 fa6b 	bl	100199dc <vTaskDelay>
-10000506:	e7fa      	b.n	100004fe <main+0x46>
-10000508:	20016218 	.word	0x20016218
-1000050c:	1001b3f4 	.word	0x1001b3f4
-10000510:	10000391 	.word	0x10000391
+100004d0 <main>:
+100004d0:	b500      	push	{lr}
+100004d2:	b085      	sub	sp, #20
+100004d4:	f004 fed2 	bl	1000527c <stdio_init_all>
+100004d8:	2001      	movs	r0, #1
+100004da:	f017 fbab 	bl	10017c34 <xQueueCreateMutex>
+100004de:	4b0c      	ldr	r3, [pc, #48]	@ (10000510 <main+0x40>)
+100004e0:	6018      	str	r0, [r3, #0]
+100004e2:	2280      	movs	r2, #128	@ 0x80
+100004e4:	490b      	ldr	r1, [pc, #44]	@ (10000514 <main+0x44>)
+100004e6:	480c      	ldr	r0, [pc, #48]	@ (10000518 <main+0x48>)
+100004e8:	ab03      	add	r3, sp, #12
+100004ea:	9301      	str	r3, [sp, #4]
+100004ec:	2301      	movs	r3, #1
+100004ee:	9300      	str	r3, [sp, #0]
+100004f0:	2300      	movs	r3, #0
+100004f2:	0052      	lsls	r2, r2, #1
+100004f4:	f019 f85a 	bl	100195ac <xTaskCreate>
+100004f8:	9803      	ldr	r0, [sp, #12]
+100004fa:	2101      	movs	r1, #1
+100004fc:	f019 f974 	bl	100197e8 <vTaskCoreAffinitySet>
+10000500:	f019 f8a6 	bl	10019650 <vTaskStartScheduler>
+10000504:	20fa      	movs	r0, #250	@ 0xfa
+10000506:	0040      	lsls	r0, r0, #1
+10000508:	f019 fa68 	bl	100199dc <vTaskDelay>
+1000050c:	e7fa      	b.n	10000504 <main+0x34>
+1000050e:	46c0      	nop			@ (mov r8, r8)
+10000510:	20016218 	.word	0x20016218
 10000514:	1001b3fc 	.word	0x1001b3fc
 10000518:	10000475 	.word	0x10000475
 
