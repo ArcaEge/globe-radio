@@ -1,37 +1,5 @@
 #include "httpclient.h"
 
-// int main() {
-// #include "wificonnection.h"
-
-//     stdio_init_all();
-
-//     connectToWifi(WIFI_SSID, WIFI_PASSWORD);
-
-//     char* serverName = "de1.api.radio-browser.info";
-//     char* uri = "/json/stations/topclick/2";
-
-//     struct HttpRequest request;
-
-//     request.complete = false;
-
-//     httpc_connection_t settings = {
-//         .use_proxy = 0,
-//         .headers_done_fn = httpClientHeadersDone,
-//         .result_fn = httpClientResult
-//     };
-//     httpc_state_t* connection = NULL;
-
-//     request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
-
-//     printf("Waiting for request to complete\n");
-//     while (!(request.complete)) {
-//         sleep_ms(10);
-//     }
-//     printf("Request complete\n");
-
-//     cyw43_arch_deinit();
-//     return 0;
-// }
 
 err_t httpClientHeadersDone(httpc_state_t* connection, struct HttpRequest* request, struct pbuf* hdr, u16_t hdr_len, u32_t content_len) {
 #ifdef HTTPC_DEBUG
@@ -94,3 +62,15 @@ void httpClientResult(struct HttpRequest* request, httpc_result_t httpc_result, 
     (*request).result = httpc_result;
     (*request).serverResponse = srv_res;
 }
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+extern httpc_connection_t getConnectionSettings() {
+    httpc_connection_t connection_settings = {
+        .use_proxy = 0,
+        .headers_done_fn = httpClientHeadersDone,
+        .result_fn = httpClientResult
+    };
+    return connection_settings;
+}
+#pragma GCC diagnostic pop

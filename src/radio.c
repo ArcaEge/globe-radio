@@ -7,6 +7,10 @@
 #include "pico/stdlib.h"
 #include "httpclient.h"
 #include "wificonnection.h"
+#include "stream.h"
+#include "utils.h"
+#include "hardware/exception.h"
+
 //#include "picomp3lib/src/mp3dec.h"
 // #include "lwip/dns.h"
 
@@ -15,11 +19,28 @@
 
 #define SPEAKER 6
 
+#define log_core_num(fmt, ...) printf("[core %d] " fmt, portGET_CORE_ID(), ##__VA_ARGS__)
+
 const uint sampleRate = 11000;
 // ip_addr_t ip;
 
 // static QueueHandle_t xQueue = NULL;
 static SemaphoreHandle_t printfMutex;
+
+static void waitForDebugger() {
+    log_core_num("Waiting for debugger...\n");
+    __breakpoint();
+}
+
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName) {
+    log_core_num("Stack overflow in task '%s'\n", pcTaskName);
+    waitForDebugger();
+}
+
+static void hardfault_handler() {
+    log_core_num("hardfault!!!\n");
+    waitForDebugger();
+}
 
 uint64_t writeTone(struct audioPlayer* player) {
     //pwm_set_gpio_level(player->gpio, WAV_DATA[player->playbackPosition] * (player->amplitude/255.0f) * 4);
@@ -28,7 +49,7 @@ uint64_t writeTone(struct audioPlayer* player) {
     return data;
 }
 
-void audioTask(void *pvParameters) {
+void audioTask(void* pvParameters) {
     // Make speaker pin PWM
     gpio_set_function(SPEAKER, GPIO_FUNC_PWM);
 
@@ -42,31 +63,27 @@ void audioTask(void *pvParameters) {
     printf("sampleRate: %dHz\n", sampleRate);
     xSemaphoreGive(printfMutex);
 
-    while(true) {
+    while (true) {
         vTaskDelay(500);
     }
 }
 
-void webRequestTask(void *pvParameters) {
-    char *serverName = "de1.api.radio-browser.info";
-    char *uri = "/json/stations/topclick/2";
+void webRequestTask(void* pvParameters) {
+    char* serverName = "de1.api.radio-browser.info";
+    char* uri = "/json/stations/topclick/2";
 
     struct HttpRequest request;
-
     request.complete = false;
 
     httpc_state_t* connection = NULL;
 
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
-    httpc_connection_t settings = {
-        .use_proxy = 0,
-        .headers_done_fn = httpClientHeadersDone,
-        .result_fn = httpClientResult
-    };
+    ip4_addr_t hostAddress = getAddressFromHost(serverName);
 
-    request.err = httpc_get_file_dns(serverName, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
-    #pragma GCC diagnostic pop
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+    httpc_connection_t settings = getConnectionSettings();
+    request.err = httpc_get_file(&hostAddress, HTTP_DEFAULT_PORT, uri, &settings, httpClientReceive, &request, &connection);
+#pragma GCC diagnostic pop
 
     printf("Waiting for request to complete\n");
     while (!(request.complete)) {
@@ -79,31 +96,27 @@ void webRequestTask(void *pvParameters) {
     }
 }
 
-void wifiConnectTask(void *pvParameters) {
-    connectToWifi(WIFI_SSID, WIFI_PASSWORD, &printfMutex);
+void wifiConnectTask(void* pvParameters) {
+    connectToWifi(WIFI_SSID, WIFI_PASSWORD);
 
-    xTaskCreate(webRequestTask, "webRequest", 4096, NULL, 1, NULL);
+    xTaskCreate(webRequestTask, "webRequest", 2048, NULL, 1, NULL);
     xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
 
-    while (true) {
-        vTaskDelay(500);
-    }
+    vTaskDelete(NULL);
 }
 
 int main() {
     stdio_init_all();
+    exception_set_exclusive_handler(HARDFAULT_EXCEPTION, hardfault_handler);
 
     printfMutex = xSemaphoreCreateMutex();
 
     TaskHandle_t wifiHandle;
-    xTaskCreate(wifiConnectTask, "wifiConnect", 512, NULL, 1, &wifiHandle);
-    vTaskCoreAffinitySet(wifiHandle, (1 << 0));     // Core 0
-    
+    xTaskCreate(wifiConnectTask, "wifiConnect", 512, NULL, 2, &wifiHandle);
+
+    //vTaskCoreAffinitySet(wifiHandle, (1 << 0));     // Core 0
+
     vTaskStartScheduler();
 
-    while (true)
-        vTaskDelay(500);
-
-    cyw43_arch_deinit();
     return 0;
 }

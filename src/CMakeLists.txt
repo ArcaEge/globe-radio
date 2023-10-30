@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 add_executable(radio
         radio.c
         audio.c
+        stream.c
         utils.c
         audiofile.h
         wificonnection.c
@@ -35,6 +36,7 @@ target_link_libraries(radio
         pico_cyw43_arch_lwip_sys_freertos
         pico_lwip_http
         hardware_timer
+        hardware_exception
         hardware_clocks
         hardware_pwm
         FreeRTOS-Kernel-Heap4

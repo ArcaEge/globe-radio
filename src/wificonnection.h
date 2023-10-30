@@ -4,5 +4,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
+#include "hardware/watchdog.h"
 
-extern bool connectToWifi(char* ssid, char* password, SemaphoreHandle_t *printfMutex);
+extern bool connectToWifi(char* ssid, char* password);

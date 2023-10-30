@@ -35,7 +35,9 @@
         "tuple": "c",
         "type_traits": "c",
         "utility": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "audiofile.h": "c",
+        "sockets.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true,
     "C_Cpp.errorSquiggles": "enabled",
