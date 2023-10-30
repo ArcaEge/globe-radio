@@ -47,10 +47,13 @@
 #define configUSE_TICK_HOOK                     0
 #define configTICK_RATE_HZ                      ( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES                    32
-#define configMINIMAL_STACK_SIZE                ( configSTACK_DEPTH_TYPE ) 256
+#define configMINIMAL_STACK_SIZE                ( configSTACK_DEPTH_TYPE ) 512
 #define configUSE_16_BIT_TICKS                  0
 
 #define configIDLE_SHOULD_YIELD                 1
+
+// Assertion error fix
+#define configNUM_CORES configNUMBER_OF_CORES
 
 /* Synchronization Related */
 #define configUSE_MUTEXES                       1
@@ -76,7 +79,7 @@
 #define configAPPLICATION_ALLOCATED_HEAP        0
 
 /* Hook function related definitions. */
-#define configCHECK_FOR_STACK_OVERFLOW          0
+#define configCHECK_FOR_STACK_OVERFLOW          2
 #define configUSE_MALLOC_FAILED_HOOK            0
 #define configUSE_DAEMON_TASK_STARTUP_HOOK      0
 
@@ -104,10 +107,10 @@
 
 #if FREE_RTOS_KERNEL_SMP // set by the RP2040 SMP port of FreeRTOS
 /* SMP port only */
-#define configNUMBER_OF_CORES                   2
+#define configNUMBER_OF_CORES                   1
 #define configTICK_CORE                         0
 #define configRUN_MULTIPLE_PRIORITIES           1
-#define configUSE_CORE_AFFINITY                 1
+#define configUSE_CORE_AFFINITY                 0
 #define configUSE_PASSIVE_IDLE_HOOK             0
 #endif
 
