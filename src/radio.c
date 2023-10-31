@@ -66,8 +66,8 @@ void audioTask(void* pvParameters) {
 }
 
 void webRequestTask(void* pvParameters) {
-    char* serverName = "de1.api.radio-browser.info";
-    char* uri = "/json/stations/topclick/2";
+    char serverName[] = "de1.api.radio-browser.info";
+    char uri[] = "/json/stations/topclick/2";
 
     struct HttpRequest request;
     request.complete = false;
@@ -98,6 +98,9 @@ void wifiConnectTask(void* pvParameters) {
 
     xTaskCreate(webRequestTask, "webRequest", 2048, NULL, 1, NULL);
     xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
+
+    printf("Socket descriptor: %d\n", openSocket("de1.api.radio-browser.info", 80));
+    printf("Socket descriptor: %d\n", openSocket("de1.api.radio-browser.info", 443));
 
     vTaskDelete(NULL);
 }

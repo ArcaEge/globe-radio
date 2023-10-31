@@ -19,6 +19,10 @@
 #define MEM_LIBC_MALLOC             1
 
 #else
+#define DEFAULT_UDP_RECVMBOX_SIZE TCPIP_MBOX_SIZE
+#define DEFAULT_TCP_RECVMBOX_SIZE TCPIP_MBOX_SIZE
+#define DEFAULT_ACCEPTMBOX_SIZE TCPIP_MBOX_SIZE
+
 #define LWIP_COMPAT_SOCKETS             1
 #define LWIP_POSIX_SOCKETS_IO_NAMES     0       /* Causes conflicts with normal file operations */
 #define LWIP_TCP_CLOSE_TIMEOUT_MS_DEFAULT   2000        /* Speed up socket close (alternative to enabling SO_LINGER) - default is 20 secs */

@@ -6,17 +6,9 @@
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/http_client.h"
+#include "ipUtils.h"
 
 //#define HTTPC_DEBUG
-
-struct HttpRequest {
-    char* header;
-    char* body;
-    bool complete;
-    httpc_result_t result;
-    u32_t serverResponse;
-    err_t err;
-};
 
 // Copy connection settings
 httpc_connection_t getConnectionSettings();
