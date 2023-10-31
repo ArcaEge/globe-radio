@@ -4,10 +4,10 @@ add_executable(radio
         radio.c
         audio.c
         stream.c
-        utils.c
-        audiofile.h
-        wificonnection.c
-        httpclient.c
+        ipUtils.c
+        audioFile.h
+        wifiConnection.c
+        httpClient.c
         )
 
 target_include_directories(radio PRIVATE

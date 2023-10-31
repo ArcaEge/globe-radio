@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "ipUtils.h"
 
 ip4_addr_t getAddressFromHost(const char *host) {
     ip4_addr_t hostAddress;

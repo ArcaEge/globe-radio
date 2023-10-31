@@ -3071,24 +3071,24 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/utils.c",
+			"path" : "src/ipUtils.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "src/audiofile.h",
+			"path" : "src/audioFile.h",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/wificonnection.c",
+			"path" : "src/wifiConnection.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/httpclient.c",
+			"path" : "src/httpClient.c",
 			"sourceGroupIndex" : 0
 		},
 		{

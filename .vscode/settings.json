@@ -37,7 +37,8 @@
         "utility": "c",
         "math.h": "c",
         "audiofile.h": "c",
-        "sockets.h": "c"
+        "sockets.h": "c",
+        "exception.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true,
     "C_Cpp.errorSquiggles": "enabled",

@@ -1,10 +1,13 @@
+#pragma once
+
 #include <stdio.h>
 #include <stdbool.h>
+#include <lwip/api.h>
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/http_client.h"
 
-#define HTTPC_DEBUG
+//#define HTTPC_DEBUG
 
 struct HttpRequest {
     char* header;

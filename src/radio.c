@@ -5,16 +5,13 @@
 #include <semphr.h>
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "httpclient.h"
-#include "wificonnection.h"
+#include "httpClient.h"
+#include "wifiConnection.h"
 #include "stream.h"
-#include "utils.h"
+#include "ipUtils.h"
 #include "hardware/exception.h"
 
-//#include "picomp3lib/src/mp3dec.h"
-// #include "lwip/dns.h"
-
-#include "audiofile.h"
+#include "audioFile.h"
 #include "audio.h"
 
 #define SPEAKER 6

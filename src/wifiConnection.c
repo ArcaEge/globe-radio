@@ -1,4 +1,4 @@
-#include "wificonnection.h"
+#include "wifiConnection.h"
 
 extern bool connectToWifi(char* ssid, char* password) {
     if (cyw43_arch_init_with_country(CYW43_COUNTRY_UK)) {
