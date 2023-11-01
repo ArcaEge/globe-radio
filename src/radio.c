@@ -96,11 +96,11 @@ void webRequestTask(void* pvParameters) {
 void wifiConnectTask(void* pvParameters) {
     connectToWifi(WIFI_SSID, WIFI_PASSWORD);
 
-    xTaskCreate(webRequestTask, "webRequest", 2048, NULL, 1, NULL);
-    xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
+    // xTaskCreate(webRequestTask, "webRequest", 2048, NULL, 1, NULL);
+    // xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
 
-    printf("Socket descriptor: %d\n", openSocket("de1.api.radio-browser.info", 80));
-    printf("Socket descriptor: %d\n", openSocket("de1.api.radio-browser.info", 443));
+    struct HttpStream stream;
+    initHttpStream(&stream, "mangoradio.stream.laut.fm", "/mangoradio");
 
     vTaskDelete(NULL);
 }
