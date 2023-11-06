@@ -14,6 +14,7 @@ target_include_directories(radio PRIVATE
         ${CMAKE_SOURCE_DIR}/
         ${CMAKE_SOURCE_DIR}/src
         Config/
+        lib/picomp3lib/src
         lib/FreeRTOS-Kernel/include
         lib/FreeRTOS-Kernel/portable/GCC/ARM_CM0
         /home/arca/pico/pico-sdk/**
@@ -29,8 +30,9 @@ add_compile_definitions(
         portSUPPORT_SMP=1
 )
 
-target_link_libraries(radio
+target_link_libraries(radio PUBLIC
         freertos_config
+        picomp3lib
         pico_stdlib
         pico_multicore
         pico_cyw43_arch_lwip_sys_freertos

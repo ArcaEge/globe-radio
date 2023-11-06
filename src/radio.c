@@ -88,9 +88,14 @@ void webRequestTask(void* pvParameters) {
     }
     printf("Request complete\n");
 
-    while (true) {
-        vTaskDelay(500);
-    }
+    vTaskDelete(NULL);
+}
+
+void socketTask(void* pvParameters) {
+    struct HttpStream stream;
+    initHttpStream(&stream, "mangoradio.stream.laut.fm", "/mangoradio");
+
+    vTaskDelete(NULL);
 }
 
 void wifiConnectTask(void* pvParameters) {
@@ -99,8 +104,7 @@ void wifiConnectTask(void* pvParameters) {
     // xTaskCreate(webRequestTask, "webRequest", 2048, NULL, 1, NULL);
     // xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
 
-    struct HttpStream stream;
-    initHttpStream(&stream, "mangoradio.stream.laut.fm", "/mangoradio");
+    xTaskCreate(socketTask, "socket", 8192, NULL, 1, NULL);
 
     vTaskDelete(NULL);
 }

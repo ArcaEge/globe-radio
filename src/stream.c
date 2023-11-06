@@ -75,22 +75,13 @@ void initHttpStream(struct HttpStream* stream, const char* host, const char* pat
         return;
     }
 
-    // if (bind(stream->descriptor, (struct sockaddr*)&listen_addr, sizeof(listen_addr)) < 0) {
-    //     printf("Unable to bind socket: error %d\n", errno);
-    //     return;
-    // }
-
-    // if (listen(stream->descriptor, kConnectionThreadCount * 2) < 0) {
-    //     printf("Unable to listen on socket: error %d\n", errno);
-    //     return;
-    // }
-
     printf("Connecting to server at %s on port %u\n", addressString, ntohs(listen_addr.sin_port));
     if (connect(stream->descriptor, (struct sockaddr*)&listen_addr, sizeof(listen_addr)) != 0) {
         printf("Error contacting remote host '%s'", addressString);
         return;
     }
 
+    // Write headers to stream
     writeToStream(stream, "GET ");
     writeToStream(stream, stream->url.path);
     writeToStream(stream, " HTTP/1.1\r\n");
@@ -99,8 +90,10 @@ void initHttpStream(struct HttpStream* stream, const char* host, const char* pat
     writeToStream(stream, stream->url.host);
     writeToStream(stream, "\r\n\r\n");
 
-    char buffer[1024];
+    // Header buffer
+    unsigned char buffer[2048];
 
+    // Read headers from stream
     while (true) {
         int len = recv(stream->descriptor, buffer, sizeof(buffer) - 1, 0);
 
@@ -123,30 +116,59 @@ void initHttpStream(struct HttpStream* stream, const char* host, const char* pat
         }
     }
 
+    HMP3Decoder decoder = MP3InitDecoder();
+    int buffer_len = 0;
+    // int len = 0;
+
+    // while ((len = lwip_recv(stream->descriptor, buffer, 2048, 0)) > 0) {
+    //     short samples[2048];
+    //     unsigned char* mp3Buffer = (unsigned char*)buffer;
+    //     int num_samples = MP3Decode(decoder, &mp3Buffer, &len, samples, 0);
+    // }
+
+    for (int i = 0; i < 20; i++) {
+        printf("\nReading frame\n");
+        int len = recv(stream->descriptor, buffer, sizeof(buffer) - 1, 0);
+
+        if (len < 0) {
+            printf("Error reading response\n");
+            return;
+        }
+
+        if (len == 0) {
+            printf("End of response\n");
+            break;
+        }
+
+        short samples[2048];
+        unsigned char* mp3Buffer = buffer;
+        int bytesLeft = len;
+        int result;
+
+        do {
+            result = MP3Decode(decoder, &mp3Buffer, &bytesLeft, samples, 0);
+            printf("Decoded %d samples\n", result);
+
+            if (result == ERR_MP3_MAINDATA_UNDERFLOW) {
+                printf("Underflow\n");
+                // Fetch more data from the stream
+                int len = recv(stream->descriptor, buffer, sizeof(buffer) - 1, 0);
+                if (len <= 0) {
+                    break;
+                }
+                mp3Buffer = buffer;
+                bytesLeft = len;
+            } else if (result != ERR_MP3_NONE) {
+                // Handle other errors
+                printf("Error: %d\n", result);
+                break;
+            }
+        } while (result != ERR_MP3_NONE);
+        printf("End of frame\n");
+    }
+
+
     closeSocket(stream->descriptor);
-
-    // while (true) {
-    //     struct sockaddr_storage remote_addr;
-    //     socklen_t len = sizeof(remote_addr);
-    //     int conn_sock = accept(stream->descriptor, (struct sockaddr*)&remote_addr, &len);
-    //     if (conn_sock >= 0) {
-    //         handle_connection(conn_sock);
-    //     }
-    //     // char buffer[1];
-    //     // readFromStream(stream, buffer, 1);
-    //     // printf("%s", buffer);
-    //     //vTaskDelay(1);
-    // }
-
-    // // TODO: read headers from stream
-    // char buffer[128];
-    // int done = 0;
-    // // readFromStream(stream, buffer, 128);
-    // while (done < sizeof(buffer)) {
-    //     int done_now = lwip_recv(stream->descriptor, buffer + done, sizeof(buffer) - done, 0);
-    //     done += done_now;
-    // }
-    // printf("%s", buffer);
 }
 
 // Writes data to HttpStream
@@ -155,6 +177,6 @@ void writeToStream(struct HttpStream* stream, const char* data) {
 }
 
 // Reads data from HttpStream into buffer
-void readFromStream(struct HttpStream* stream, char* buffer, uint count) {
-    lwip_recv(stream->descriptor, buffer, count, 0);
+int readFromStream(struct HttpStream* stream, char* buffer, uint count) {
+    return recv(stream->descriptor, buffer, count, 0);
 }
