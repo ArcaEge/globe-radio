@@ -1198,7 +1198,7 @@
 				{
 					"directoryIndex" : 82,
 					"id" : "ELF2UF2Build::@145eef247bfb46b6828c",
-					"jsonFile" : "target-ELF2UF2Build-Debug-b7849851573ddd1794bc.json",
+					"jsonFile" : "target-ELF2UF2Build-Debug-adb945235fde7349b6ab.json",
 					"name" : "ELF2UF2Build",
 					"projectIndex" : 0
 				},
@@ -1240,7 +1240,7 @@
 				{
 					"directoryIndex" : 82,
 					"id" : "radio::@145eef247bfb46b6828c",
-					"jsonFile" : "target-radio-Debug-202687bb715246771330.json",
+					"jsonFile" : "target-radio-Debug-9d459fabb4f0a1380a9d.json",
 					"name" : "radio",
 					"projectIndex" : 0
 				}

@@ -4,6 +4,7 @@ add_executable(radio
         radio.c
         audio.c
         stream.c
+        mp3.c
         ipUtils.c
         audioFile.h
         wifiConnection.c

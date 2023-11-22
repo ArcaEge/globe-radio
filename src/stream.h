@@ -1,7 +1,4 @@
 #pragma once
-// Mostly copied from AdrianBesciak's Internet Radio Receiver
-
-#pragma once
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <task.h>
@@ -10,6 +7,9 @@
 #include <string.h>
 #include "mp3dec.h"
 #include "ipUtils.h"
+#include "mp3.h"
+
+#define MP3_BUF_SIZE 8192
 
 struct HttpStream {
     struct HttpUrl url;
@@ -18,10 +18,11 @@ struct HttpStream {
     uint headerCount;
 };
 
+static uint32_t mp3_callback(MP3FrameInfo *header, int16_t *buffer, uint32_t length);
 
 int openSocket(const char* host, uint16_t port);
 void closeSocket(int descriptor);
 
 void initHttpStream(struct HttpStream* stream, const char* host, const char* path);
 void writeToStream(struct HttpStream* stream, const char* data);
-int readFromStream(struct HttpStream* stream, char* buffer, uint count);
+int readFromStream(void* stream, char* buffer, uint count);

@@ -102,9 +102,8 @@ void wifiConnectTask(void* pvParameters) {
     connectToWifi(WIFI_SSID, WIFI_PASSWORD);
 
     // xTaskCreate(webRequestTask, "webRequest", 2048, NULL, 1, NULL);
-    // xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
-
-    xTaskCreate(socketTask, "socket", 8192, NULL, 1, NULL);
+    //xTaskCreate(audioTask, "Audio", 1024, NULL, 1, NULL);
+    xTaskCreate(socketTask, "socket", (4 * 1024) * 4, NULL, 1, NULL);
 
     vTaskDelete(NULL);
 }
